@@ -4,14 +4,14 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "dev": "vite --port 3333 --open",
+    "dev": "vite --port 3000 --open",
     "build": "vite build",
     "preview": "vite build && vite preview",
     "preview-https": "serve dist",
-    "start": "pnpm dev & wait-on tcp:3333 -v",
+    "start": "pnpm dev & wait-on tcp:3000 -v",
     "lint": "eslint ./src",
-    "test:e2e": "pnpm dev & wait-on tcp:3333 -v & cypress open",
-    "test:ci": "pnpm dev & wait-on tcp:3333 -v & cypress run --headless",
+    "test:e2e": "pnpm dev & wait-on tcp:3000 -v & cypress open",
+    "test:ci": "pnpm dev & wait-on tcp:3000 -v & cypress run --headless",
     "test:unit": "vitest --run --reporter verbose",
     "test:coverage": "vitest run --coverage",
     "test:ui": "vitest --ui"
@@ -24,6 +24,8 @@
     "@sfxcode/formkit-primevue": "^1.6.0",
     "@types/markdown-it-link-attributes": "^3.0.4",
     "@types/nprogress": "^0.2.3",
+    "@typescript-eslint/eslint-plugin": "^6.19.0",
+    "@typescript-eslint/parser": "^6.19.0",
     "@unocss/eslint-config": "^0.58.3",
     "@unocss/preset-attributify": "^0.58.3",
     "@unocss/preset-icons": "^0.58.3",
@@ -86,5 +88,8 @@
   "engines": {
     "node": ">=18",
     "pnpm": ">=7"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.39.3"
   }
 }

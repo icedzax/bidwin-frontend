@@ -1,11 +1,11 @@
 {
-    "e2e": {
-        "baseUrl": "http://localhost:3333"
-    },
-    "component": {
-        "componentFolder": "cypress/component/",
-        "testFiles": "**/*spec.{js,jsx,ts,tsx}",
-        "viewportHeight": 500,
-        "viewportWidth": 700
-    }
+  "e2e": {
+    "baseUrl": "http://localhost:3000"
+  },
+  "component": {
+    "componentFolder": "cypress/component/",
+    "testFiles": "**/*spec.{js,jsx,ts,tsx}",
+    "viewportHeight": 500,
+    "viewportWidth": 700
+  }
 }
