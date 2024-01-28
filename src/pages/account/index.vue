@@ -27,7 +27,7 @@ const signOut = async () => {
         loading.value = true
         const { error } = await supabase.auth.signOut()
         if (error) throw error
-        authStore.sigOutFacebook()
+        authStore.signOutFacebook()
     } catch (error) {
         alert(error.message)
     } finally {
@@ -37,12 +37,11 @@ const signOut = async () => {
 
 
 onMounted(() => {
-    console.log(authStore.authentificated);
+    console.log(authStore.user)
 })
 </script>
 
 <template>
-    <pre>{{ authStore.user as Object<any> }}</pre>
     <div>
         <Button v-if="!authStore.authentificated" label="Sign In" @click="signIn" />
         <Button v-else label="Sign Out" @click="signOut" />

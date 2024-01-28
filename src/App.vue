@@ -11,12 +11,13 @@ const authStore = useAuthStore()
 const getSupabaseSession = () => {
 
   const setState = (data: any) => {
-    const session: any = data?.session
+    const session: any = data
     if (session && session.user) {
+      authStore.signInFaceBook(data.session?.user)
       delete session.user
+      dataStore.session = session
     }
-    dataStore.session = session
-    authStore.signInFaceBook(data.session?.user)
+
   }
 
 
