@@ -1,53 +1,50 @@
 <script setup>
 import { supabase } from '@/libs/supabase'
-import { onMounted, ref, toRefs } from 'vue'
-import { useAuthStore } from '@/store'
+import { useAuthStore } from '@/store/auth'
 
-const props = defineProps(['session'])
-const { session } = toRefs(props)
-const auth = useAuthStore()
-const users = ref({})
+const loading = ref(false)
+const email = ref('')
+const authStore = useAuthStore()
 
-const isLoading = ref(true)
 
-const signInWithFacebook = async () => {
-    const { data, error } = await supabase.auth.signInWithOAuth({
-        provider: 'facebook',
-        options: {
-            redirectTo: 'https://example.com/welcome'
+const signIn = async () => {
+    try {
+        loading.value = true
+        const { error, data } = await supabase.auth.signInWithOAuth({ provider: 'facebook' })
+        if (error) throw error
+        authStore.signInFaceBook(data.session)
+    } catch (error) {
+        if (error instanceof Error) {
+            alert(error.message)
         }
-    })
-    console.log(await supabase.auth.getUser());
+    } finally {
+        loading.value = false
+    }
 }
 
 const signOut = async () => {
-    const { error } = await supabase.auth.signOut()
-    if (error) {
-        console.log(error);
+    try {
+        loading.value = true
+        const { error } = await supabase.auth.signOut()
+        if (error) throw error
+        authStore.sigOutFacebook()
+    } catch (error) {
+        alert(error.message)
+    } finally {
+        loading.value = false
     }
 }
 
 
-onMounted(async () => {
-    console.log(auth.authentificated)
-    const { data, error } = await supabase.auth.getSession()
-    console.log(data);
+onMounted(() => {
+    console.log(authStore.authentificated);
 })
-
 </script>
 
 <template>
+    <pre>{{ authStore.user as Object<any> }}</pre>
     <div>
-        <pre>{{ users }}</pre>
+        <Button v-if="!authStore.authentificated" label="Sign In" @click="signIn" />
+        <Button v-else label="Sign Out" @click="signOut" />
     </div>
-    <template v-if="!supabase.auth">
-        <div>
-            <Button label="SignOut" @click="signOut()" />
-        </div>
-    </template>
-    <template v-else>
-        <div>
-            <Button label="Sigin with Facebook" @click="signInWithFacebook()" />
-        </div>
-    </template>
 </template>

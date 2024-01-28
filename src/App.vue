@@ -2,19 +2,48 @@
 import consola from 'consola'
 
 import { useDataStore } from '@/store/data'
+import { supabase } from '@/libs/supabase'
+import { useAuthStore } from '@/store'
 
 const dataStore = useDataStore()
+const authStore = useAuthStore()
+
+const getSupabaseSession = () => {
+
+  const setState = (data: any) => {
+    const session: any = data?.session
+    if (session && session.user) {
+      delete session.user
+    }
+    dataStore.session = session
+    authStore.signInFaceBook(data.session?.user)
+  }
+
+
+  supabase.auth.getSession().then(({ data }) => {
+    const session: any = data?.session
+    setState(session)
+  })
+
+  supabase.auth.onAuthStateChange((_, _session) => {
+    const session: any = _session
+    setState(session)
+  })
+}
 
 onMounted(async () => {
   await dataStore.$load({ name: 'app-data' }).catch((error: any) => consola.log(error))
+
+  getSupabaseSession()
+
 })
 
 useHead({
-  title: 'Vite PrimeVue Starter',
+  title: 'Bid Win | Online Items MMORPG Auctions',
   meta: [
     {
       name: 'description',
-      content: 'PrimeVue Starter starter for vue and vite',
+      content: 'Online Items MMORPG Auctions',
     },
   ],
 })
